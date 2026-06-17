@@ -14,7 +14,7 @@
 <body>
 
 <nav class="navbar">
-  <a href="index.html" class="nav-logo"><img src="images/logo-white.png" alt="Kyomatos"/></a>
+  <a href="index.html" class="nav-logo"><img src="logo-white.png" alt="Kyomatos"/></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="products.html" class="active">Shop</a></li>
@@ -61,8 +61,8 @@
 </footer>
 
 <div id="toast"></div>
-<script src="js/supabase.js"></script>
-<script src="js/cart.js"></script>
+<script src="supabase.js"></script>
+<script src="cart.js"></script>
 <script>
 // Safe fallback — also defined in supabase.js
 function getParam(key) {
@@ -73,16 +73,16 @@ let product = null;
 let selectedSize = null;
 
 const MOCK = {
-  1: { id:1, name:'Raglan Long Sleeve Tee', price:18500, category:'tops', in_stock:true, image_url:'images/tshirt-longsleeve.jpeg', images:['images/tshirt-longsleeve.jpeg'], sizes:['S','M','L','XL'], description:'Raglan sleeve long-sleeve tee in a heavy cotton. Boxy fit, soft brushed interior, and tonal Kyomatos branding.' },
-  2: { id:2, name:'Lagos Varsity Jacket', price:65000, category:'outerwear', in_stock:true, image_url:'images/jacket-varsity.jpeg', images:['images/jacket-varsity.jpeg'], sizes:['S','M','L','XL'], description:'Wool body with leather sleeves, snap buttons and embroidered Lagos script on the back.' },
-  3: { id:3, name:'Gray Origin Short', price:32000, category:'bottoms', in_stock:true, image_url:'images/short1.jpeg', images:['images/short1.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Relaxed origin short in washed gray with reinforced seams and deep pockets.' },
-  4: { id:4, name:'Kyomatos Snapback', price:12000, category:'accessories', in_stock:true, image_url:'images/hat-snapback.jpeg', images:['images/hat-snapback.jpeg'], sizes:['One Size'], description:'6-panel structured snapback with embroidered Kyomatos K on the front.' },
-  5: { id:5, name:'White Midnight Tank', price:42000, category:'tops', in_stock:true, image_url:'images/tank-black.jpeg', images:['images/tank-black.jpeg'], sizes:['S','M','L','XL'], description:'Premium tank with heavyweight fabric and reinforced stitching.' },
-  6: { id:6, name:'Off-White Origin Short', price:28000, category:'bottoms', in_stock:false, image_url:'images/short2.jpeg', images:['images/short2.jpeg'], sizes:['S','M','L','XL'], description:'Lightwashed origin short in off-white. Limited run — some sizes sold out.' },
-  7: { id:7, name:'Seal Tank Top Red', price:16000, category:'tops', in_stock:true, image_url:'images/tank-red-3.jpeg', images:['images/tank-red-3.jpeg'], sizes:['S','M','L','XL'], description:'Casual tank top with sealed hem and soft cotton.' },
-  8: { id:8, name:'Logo Balaclava', price:9500, category:'accessories', in_stock:true, image_url:'images/hat-balaclava.jpeg', images:['images/hat-balaclava.jpeg'], sizes:['One Size'], description:'Fitted logo balaclava — stretch knit for comfort and warmth.' },
-  9: { id:9, name:'Grind Joggers Gray', price:9500, category:'bottoms', in_stock:true, image_url:'images/joggers1.jpeg', images:['images/joggers1.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Tapered joggers with elastic cuffs and contrast stitching.' },
- 10: { id:10, name:'Grind Joggers Black', price:9500, category:'bottoms', in_stock:true, image_url:'images/joggers2.jpeg', images:['images/joggers2.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Black variant of the Grind Joggers with a slim taper.' },
+  1: { id:1, name:'Raglan Long Sleeve Tee', price:18500, category:'tops', in_stock:true, image_url:'tshirt-longsleeve.jpeg', images:['tshirt-longsleeve.jpeg'], sizes:['S','M','L','XL'], description:'Raglan sleeve long-sleeve tee in a heavy cotton. Boxy fit, soft brushed interior, and tonal Kyomatos branding.' },
+  2: { id:2, name:'Lagos Varsity Jacket', price:65000, category:'outerwear', in_stock:true, image_url:'jacket-varsity.jpeg', images:['jacket-varsity.jpeg'], sizes:['S','M','L','XL'], description:'Wool body with leather sleeves, snap buttons and embroidered Lagos script on the back.' },
+  3: { id:3, name:'Gray Origin Short', price:32000, category:'bottoms', in_stock:true, image_url:'short1.jpeg', images:['short1.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Relaxed origin short in washed gray with reinforced seams and deep pockets.' },
+  4: { id:4, name:'Kyomatos Snapback', price:12000, category:'accessories', in_stock:true, image_url:'hat-snapback.jpeg', images:['hat-snapback.jpeg'], sizes:['One Size'], description:'6-panel structured snapback with embroidered Kyomatos K on the front.' },
+  5: { id:5, name:'White Midnight Tank', price:42000, category:'tops', in_stock:true, image_url:'tank-black.jpeg', images:['tank-black.jpeg'], sizes:['S','M','L','XL'], description:'Premium tank with heavyweight fabric and reinforced stitching.' },
+  6: { id:6, name:'Off-White Origin Short', price:28000, category:'bottoms', in_stock:false, image_url:'short2.jpeg', images:['short2.jpeg'], sizes:['S','M','L','XL'], description:'Lightwashed origin short in off-white. Limited run — some sizes sold out.' },
+  7: { id:7, name:'Seal Tank Top Red', price:16000, category:'tops', in_stock:true, image_url:'tank-red-3.jpeg', images:['tank-red-3.jpeg'], sizes:['S','M','L','XL'], description:'Casual tank top with sealed hem and soft cotton.' },
+  8: { id:8, name:'Logo Balaclava', price:9500, category:'accessories', in_stock:true, image_url:'hat-balaclava.jpeg', images:['hat-balaclava.jpeg'], sizes:['One Size'], description:'Fitted logo balaclava — stretch knit for comfort and warmth.' },
+  9: { id:9, name:'Grind Joggers Gray', price:9500, category:'bottoms', in_stock:true, image_url:'joggers1.jpeg', images:['joggers1.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Tapered joggers with elastic cuffs and contrast stitching.' },
+ 10: { id:10, name:'Grind Joggers Black', price:9500, category:'bottoms', in_stock:true, image_url:'joggers2.jpeg', images:['joggers2.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Black variant of the Grind Joggers with a slim taper.' },
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
