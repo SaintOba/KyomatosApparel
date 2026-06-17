@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product — KYOMATOS APPAREL</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    .related { padding: 4rem 3rem 5rem; border-top: 1px solid var(--border); }
+    .related-head { margin-bottom:2.5rem; }
+    @media (max-width:1024px) { .related { padding:3rem 1.5rem 4rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo"><img src="images/logo-white.png" alt="Kyomatos"/></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html" class="active">Shop</a></li>
+    <li><a href="index.html#brand">The Brand</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="cart.html" class="cart-btn">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Bag <span class="cart-count">0</span>
+    </a>
+    <button class="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="index.html">Home</a><span>/</span>
+  <a href="products.html">Shop</a><span>/</span>
+  <span id="bc-name">...</span>
+</div>
+
+<div class="product-detail" id="product-detail">
+  <div style="grid-column:1/-1;text-align:center;padding:5rem;color:var(--muted);">
+    <div class="spinner"></div>
+    <p style="margin-top:1rem;font-family:var(--mono);font-size:0.72rem;">Loading...</p>
+  </div>
+</div>
+
+<section class="related">
+  <div class="related-head">
+    <span class="label">More Pieces</span>
+    <h2 class="display display-sm">You Might<br/><span style="color:var(--red)">Want</span></h2>
+  </div>
+  <div class="product-grid" id="related-grid"></div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><div class="footer-logo"><img src="images/logo-white.png" alt="Kyomatos"/></div><p class="footer-desc">Lagos streetwear built from nothing. No shortcuts.</p></div>
+    <div><p class="footer-col-title">Shop</p><ul class="footer-col-links"><li><a href="products.html">All Products</a></li><li><a href="cart.html">Your Bag</a></li></ul></div>
+    <div><p class="footer-col-title">Info</p><ul class="footer-col-links"><li><a href="index.html#brand">About</a></li></ul></div>
+    <div><p class="footer-col-title">Contact</p><div class="footer-contact"><p>Lagos, Nigeria</p><p>hello@kyomatos.com</p></div></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 KYOMATOS APPAREL. All rights reserved.</p></div>
+</footer>
+
+<div id="toast"></div>
+<script src="js/supabase.js"></script>
+<script src="js/cart.js"></script>
+<script>
+// Safe fallback — also defined in supabase.js
+function getParam(key) {
+  return new URLSearchParams(window.location.search).get(key);
+}
+
+let product = null;
+let selectedSize = null;
+
+const MOCK = {
+  1: { id:1, name:'Raglan Long Sleeve Tee', price:18500, category:'tops', in_stock:true, image_url:'images/tshirt-longsleeve.jpeg', images:['images/tshirt-longsleeve.jpeg'], sizes:['S','M','L','XL'], description:'Raglan sleeve long-sleeve tee in a heavy cotton. Boxy fit, soft brushed interior, and tonal Kyomatos branding.' },
+  2: { id:2, name:'Lagos Varsity Jacket', price:65000, category:'outerwear', in_stock:true, image_url:'images/jacket-varsity.jpeg', images:['images/jacket-varsity.jpeg'], sizes:['S','M','L','XL'], description:'Wool body with leather sleeves, snap buttons and embroidered Lagos script on the back.' },
+  3: { id:3, name:'Gray Origin Short', price:32000, category:'bottoms', in_stock:true, image_url:'images/short1.jpeg', images:['images/short1.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Relaxed origin short in washed gray with reinforced seams and deep pockets.' },
+  4: { id:4, name:'Kyomatos Snapback', price:12000, category:'accessories', in_stock:true, image_url:'images/hat-snapback.jpeg', images:['images/hat-snapback.jpeg'], sizes:['One Size'], description:'6-panel structured snapback with embroidered Kyomatos K on the front.' },
+  5: { id:5, name:'White Midnight Tank', price:42000, category:'tops', in_stock:true, image_url:'images/tank-black.jpeg', images:['images/tank-black.jpeg'], sizes:['S','M','L','XL'], description:'Premium tank with heavyweight fabric and reinforced stitching.' },
+  6: { id:6, name:'Off-White Origin Short', price:28000, category:'bottoms', in_stock:false, image_url:'images/short2.jpeg', images:['images/short2.jpeg'], sizes:['S','M','L','XL'], description:'Lightwashed origin short in off-white. Limited run — some sizes sold out.' },
+  7: { id:7, name:'Seal Tank Top Red', price:16000, category:'tops', in_stock:true, image_url:'images/tank-red-3.jpeg', images:['images/tank-red-3.jpeg'], sizes:['S','M','L','XL'], description:'Casual tank top with sealed hem and soft cotton.' },
+  8: { id:8, name:'Logo Balaclava', price:9500, category:'accessories', in_stock:true, image_url:'images/hat-balaclava.jpeg', images:['images/hat-balaclava.jpeg'], sizes:['One Size'], description:'Fitted logo balaclava — stretch knit for comfort and warmth.' },
+  9: { id:9, name:'Grind Joggers Gray', price:9500, category:'bottoms', in_stock:true, image_url:'images/joggers1.jpeg', images:['images/joggers1.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Tapered joggers with elastic cuffs and contrast stitching.' },
+ 10: { id:10, name:'Grind Joggers Black', price:9500, category:'bottoms', in_stock:true, image_url:'images/joggers2.jpeg', images:['images/joggers2.jpeg'], sizes:['S','M','L','XL','XXL'], description:'Black variant of the Grind Joggers with a slim taper.' },
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const productId = getParam('id');
+  if (!productId) { location.href = 'products.html'; return; }
+  try {
+    // TODO: Replace with Supabase fetch
+    // const t = await db.from('products');
+    // const r = await t.select('*', `id=eq.${productId}`);
+    // product = r[0];
+    product = MOCK[productId] || MOCK[1];
+    renderProduct();
+    renderRelated();
+    document.getElementById('bc-name').textContent = product.name;
+    document.title = `${product.name} — KYOMATOS APPAREL`;
+  } catch(err) {
+    document.getElementById('product-detail').innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>Not Found</h3><p><a href="products.html" style="color:var(--red);">← Back to shop</a></p></div>`;
+  }
+});
+
+function renderProduct() {
+  document.getElementById('product-detail').innerHTML = `
+    <div class="product-detail-imgs">
+      <div class="product-main-img">◈</div>
+      <div class="product-thumbs">
+        ${[0,1,2].map((_, i) => `<div class="product-thumb${i===0?' active':''}">◈</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="product-detail-info">
+      <p class="product-detail-cat">${product.category}</p>
+      <h1 class="product-detail-name">${product.name}</h1>
+      <p class="product-detail-price">${formatPrice(product.price)}</p>
+
+      ${!product.in_stock ? '<div class="badge badge-grey" style="margin-bottom:1.5rem;font-size:0.65rem;padding:0.4rem 1rem;">Sold Out</div>' : ''}
+
+      <p class="product-detail-desc">${product.description}</p>
+
+      ${product.sizes && product.sizes.length > 1 ? `
+        <p class="size-label">Size <span style="color:var(--muted);font-size:0.55rem;">— Select one</span></p>
+        <div class="size-options">
+          ${product.sizes.map(s => `<div class="size-opt" data-size="${s}" onclick="selectSize('${s}')">${s}</div>`).join('')}
+        </div>
+      ` : ''}
+
+      ${product.in_stock ? `
+        <button class="add-to-cart-btn" onclick="handleAddToCart()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          Add to Bag
+        </button>
+      ` : `<button class="add-to-cart-btn" disabled style="background:var(--card2);cursor:not-allowed;color:var(--muted);">Sold Out</button>`}
+
+      <a href="products.html" class="btn btn-outline" style="width:100%;text-align:center;display:block;">← Continue Shopping</a>
+
+      <div class="product-features">
+        <div class="feature-item">★ &nbsp; Ships within Lagos in 1–2 days / Nationwide 3–5 days</div>
+        <div class="feature-item">★ &nbsp; Limited run — no restock guarantee</div>
+        <div class="feature-item">★ &nbsp; Handpicked quality — Kyomatos standard</div>
+        <div class="feature-item">★ &nbsp; 7-day returns on unworn items</div>
+      </div>
+    </div>
+  `;
+}
+
+function selectSize(size) {
+  selectedSize = size;
+  document.querySelectorAll('.size-opt').forEach(el => el.classList.toggle('active', el.dataset.size === size));
+}
+
+function handleAddToCart() {
+  if (product.sizes && product.sizes.length > 1 && !selectedSize) {
+    showToast('Select a size first'); return;
+  }
+  Cart.add(product, selectedSize);
+}
+
+function renderRelated() {
+  const vals = Object.values(MOCK).map(p => ({ ...p }));
+  let related = vals.filter(p => p.id !== product.id && p.category === product.category).slice(0,4);
+  if (!related.length) related = vals.filter(p => p.id !== product.id).slice(0,4);
+  document.getElementById('related-grid').innerHTML = related.map(p => `
+    <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+      <div class="product-card-thumb">${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy"/>` : '◈'}</div>
+      <div class="product-card-body"><p class="product-card-cat">${p.category}</p><h3 class="product-card-name">${p.name}</h3><p class="product-card-price">${p.in_stock ? formatPrice(p.price) : '<span style="color:var(--muted)">Sold Out</span>'}</p></div>
+      <div class="product-card-overlay"><span>${p.in_stock ? 'Shop Now' : 'Sold Out'}</span></div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>

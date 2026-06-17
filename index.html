@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KYOMATOS APPAREL — Built Different</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+      min-height: 100vh; padding-top: var(--nav-h);
+      background: var(--black); display: flex; flex-direction: column;
+      justify-content: flex-end; position: relative; overflow: hidden;
+    }
+    .hero-bg-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      font-family: var(--display); font-size: clamp(8rem, 20vw, 18rem);
+      text-transform: uppercase; color: rgba(255,255,255,0.025);
+      white-space: nowrap; letter-spacing: -0.02em; user-select: none;
+      pointer-events: none; line-height:1;
+    }
+    .hero-inner {
+      position: relative; z-index:2;
+      padding: 0 3rem 5rem;
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: flex-end; gap: 3rem;
+    }
+    .hero-left {}
+    .hero-tag {
+      display: inline-flex; align-items:center; gap: 0.75rem;
+      font-family: var(--mono); font-size: 0.6rem; font-weight:700;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero-tag::before { content:''; width:24px; height:1px; background:var(--red); }
+    .hero-title {
+      font-family: var(--display); text-transform: uppercase;
+      font-size: clamp(4rem, 12vw, 11rem); line-height: 0.9;
+      letter-spacing: -0.01em; margin-bottom: 2rem;
+    }
+    .hero-title .red { color: var(--red); }
+    .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .hero-right {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 2rem; padding-bottom: 0.5rem;
+    }
+    .hero-logo-large img { height: 140px; width: auto; opacity: 0.9; }
+    .hero-stat { text-align: right; }
+    .hero-stat-num { font-family:var(--display); font-size:2.5rem; color:var(--white); line-height:1; }
+    .hero-stat-label { font-family:var(--mono); font-size:0.55rem; color:var(--muted); letter-spacing:0.2em; text-transform:uppercase; }
+
+    /* ── TICKER ──────────────────────────────────── */
+    /* (already in shared styles) */
+
+    /* ── DROP SECTION ────────────────────────────── */
+    .drop-section { padding: 5rem 3rem; }
+    .section-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3rem; }
+    .section-head-left {}
+    .drop-grid {
+      display: grid; gap: 1px; background: var(--border);
+      grid-template-columns: repeat(4,1fr);
+    }
+    .drop-grid .product-card { background:var(--black); }
+
+    /* ── BRAND STATEMENT ─────────────────────────── */
+    .brand-statement {
+      background: var(--red); padding: 5rem 3rem;
+      position: relative; overflow: hidden;
+    }
+    .brand-statement-bg {
+      position:absolute; right:-2rem; top:50%; transform:translateY(-50%);
+      font-family:var(--display); font-size:22rem; color:rgba(0,0,0,0.12);
+      text-transform:uppercase; line-height:1; user-select:none; pointer-events:none;
+    }
+    .brand-statement-inner { position:relative; z-index:2; max-width:700px; }
+    .brand-statement-quote {
+      font-family:var(--display); font-size:clamp(2rem, 5vw, 4.5rem);
+      text-transform:uppercase; line-height:0.95; color:var(--white); margin-bottom:2rem;
+    }
+    .brand-statement-body { font-size:0.95rem; color:rgba(255,255,255,0.8); line-height:1.85; margin-bottom:2.5rem; max-width:520px; }
+
+    /* ── CATEGORIES ──────────────────────────────── */
+    .categories-section { padding: 5rem 3rem; }
+    .cat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-top:3rem; }
+    .cat-card {
+      position:relative; overflow:hidden; cursor:pointer;
+      background:var(--card); aspect-ratio:4/5;
+      display:flex; align-items:flex-end;
+    }
+    .cat-card-bg {
+      position:absolute; inset:0;
+      background: var(--card2);
+      display:flex; align-items:center; justify-content:center;
+      font-size:5rem; color:var(--border2);
+      transition:transform 0.5s var(--ease);
+    }
+    .cat-card:hover .cat-card-bg { transform:scale(1.05); }
+    .cat-card-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);
+    }
+    .cat-card-body { position:relative; z-index:2; padding:1.5rem; width:100%; }
+    .cat-card-label { font-family:var(--mono); font-size:0.58rem; color:var(--red); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.4rem; }
+    .cat-card-title { font-family:var(--display); font-size:2rem; text-transform:uppercase; color:var(--white); margin-bottom:1rem; }
+    .cat-card-cta { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--white); border-bottom:1px solid var(--red); padding-bottom:2px; display:inline-block; transition:color 0.2s; }
+    .cat-card:hover .cat-card-cta { color:var(--red); }
+
+    /* ── NEWSLETTER ──────────────────────────────── */
+    .newsletter { background:var(--dark); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:5rem 3rem; }
+    .newsletter-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .newsletter-title { font-family:var(--display); font-size:clamp(2.5rem,5vw,4rem); text-transform:uppercase; line-height:0.95; margin-bottom:1rem; }
+    .newsletter-title em { color:var(--red); font-style:normal; }
+    .newsletter-sub { font-family:var(--mono); font-size:0.7rem; color:var(--muted); letter-spacing:0.05em; line-height:1.7; }
+    .newsletter-form { display:flex; gap:0; }
+    .newsletter-input { flex:1; padding:1rem 1.25rem; background:var(--card); border:1px solid var(--border2); color:var(--white); font-family:var(--mono); font-size:0.78rem; outline:none; border-right:none; }
+    .newsletter-input:focus { border-color:var(--red); }
+    .newsletter-input::placeholder { color:var(--muted); }
+    .newsletter-btn { background:var(--red); color:var(--white); padding:1rem 1.75rem; font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; border:none; cursor:pointer; white-space:nowrap; transition:background 0.2s; }
+    .newsletter-btn:hover { background:var(--red-hot); }
+    .newsletter-note { font-family:var(--mono); font-size:0.58rem; color:var(--muted); margin-top:0.75rem; }
+
+    @media (max-width:1024px) {
+      .hero-inner { grid-template-columns:1fr; padding:0 1.5rem 4rem; }
+      .hero-right { align-items:flex-start; flex-direction:row; }
+      .hero-logo-large img { height:90px; }
+      .drop-section { padding:4rem 1.5rem; }
+      .drop-grid { grid-template-columns:repeat(2,1fr); }
+      .brand-statement { padding:4rem 1.5rem; }
+      .categories-section { padding:4rem 1.5rem; }
+      .cat-grid { grid-template-columns:1fr; }
+      .newsletter { padding:4rem 1.5rem; }
+      .newsletter-inner { grid-template-columns:1fr; gap:2.5rem; }
+    }
+    @media (max-width:768px) {
+      .hero-title { font-size:clamp(3.5rem,15vw,7rem); }
+      .drop-grid { grid-template-columns:repeat(2,1fr); }
+      .section-head { flex-direction:column; align-items:flex-start; gap:1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <img src="images/logo-white.png" alt="Kyomatos" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="products.html">Drops</a></li>
+    <li><a href="products.html">Shop</a></li>
+    <li><a href="#brand">The Brand</a></li>
+    <li><a href="index.html#footer">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="cart.html" class="cart-btn">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Bag <span class="cart-count">0</span>
+    </a>
+    <button class="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg-text">KYOMATOS</div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag">Lagos, Nigeria — Est. 2024</div>
+      <h1 class="hero-title">
+        Built<br/>
+        <span class="red">Different</span>
+      </h1>
+      <div class="hero-actions">
+        <a href="products.html" class="btn btn-red">Shop the Drop</a>
+        <a href="#brand" class="btn btn-outline">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-logo-large">
+        <img src="images/logo-white.png" alt="Kyomatos" />
+      </div>
+      <div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">100%</div>
+          <div class="hero-stat-label">Lagos Made</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TICKER ─────────────────────────────────────────────────── -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>KYOMATOS APPAREL</span><span class="ticker-sep">★</span>
+    <span>LAGOS STREETWEAR</span><span class="ticker-sep">★</span>
+    <span>BUILT DIFFERENT</span><span class="ticker-sep">★</span>
+    <span>NEW DROP LIVE</span><span class="ticker-sep">★</span>
+    <span>NO SHORTCUTS</span><span class="ticker-sep">★</span>
+    <span>REPRESENT THE K</span><span class="ticker-sep">★</span>
+    <!-- duplicate for seamless loop -->
+    <span>KYOMATOS APPAREL</span><span class="ticker-sep">★</span>
+    <span>LAGOS STREETWEAR</span><span class="ticker-sep">★</span>
+    <span>BUILT DIFFERENT</span><span class="ticker-sep">★</span>
+    <span>NEW DROP LIVE</span><span class="ticker-sep">★</span>
+    <span>NO SHORTCUTS</span><span class="ticker-sep">★</span>
+    <span>REPRESENT THE K</span><span class="ticker-sep">★</span>
+  </div>
+</div>
+
+<!-- ─── LATEST DROP ────────────────────────────────────────────── -->
+<section class="drop-section" id="drop">
+  <div class="section-head">
+    <div class="section-head-left">
+      <span class="label">New Arrivals</span>
+      <h2 class="display display-sm">Latest<br/>Drop</h2>
+    </div>
+    <a href="products.html" class="btn btn-outline-red">View All</a>
+  </div>
+
+  <!-- TODO: Replace with Supabase products -->
+  <div class="drop-grid" id="drop-grid">
+    <div class="product-card" onclick="location.href='product.html?id=1'">
+      <div class="product-card-thumb">◈</div>
+      <div class="product-card-body">
+        <p class="product-card-cat">Tops</p>
+        <h3 class="product-card-name">Raglan Long Sleeve Tee</h3>
+        <p class="product-card-price">₦18,500</p>
+      </div>
+      <div class="product-card-overlay"><span>Quick View</span></div>
+    </div>
+    <div class="product-card" onclick="location.href='product.html?id=2'">
+      <div class="product-card-thumb">◈</div>
+      <div class="product-card-body">
+        <p class="product-card-cat">Outerwear</p>
+        <h3 class="product-card-name">Lagos Varsity Jacket</h3>
+        <p class="product-card-price">₦65,000</p>
+      </div>
+      <div class="product-card-overlay"><span>Quick View</span></div>
+    </div>
+    <div class="product-card" onclick="location.href='product.html?id=3'">
+      <div class="product-card-thumb">◈</div>
+      <div class="product-card-body">
+        <p class="product-card-cat">Bottoms</p>
+        <h3 class="product-card-name">Gray Origin Short</h3>
+        <p class="product-card-price">₦32,000</p>
+      </div>
+      <div class="product-card-overlay"><span>Quick View</span></div>
+    </div>
+    <div class="product-card" onclick="location.href='product.html?id=4'">
+      <div class="product-card-thumb">◈</div>
+      <div class="product-card-body">
+        <p class="product-card-cat">Accessories</p>
+        <h3 class="product-card-name">Kyomatos Snapback</h3>
+        <p class="product-card-price">₦12,000</p>
+      </div>
+      <div class="product-card-overlay"><span>Quick View</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BRAND STATEMENT ────────────────────────────────────────── -->
+<section class="brand-statement" id="brand">
+  <div class="brand-statement-bg">K</div>
+  <div class="brand-statement-inner">
+    <h2 class="brand-statement-quote">Zero Capital.<br/>All Vision.</h2>
+    <p class="brand-statement-body">
+      Kyomatos Apparel wasn't built in a boardroom. It was built in Lagos, from nothing —
+      no connections, no funding, just a relentless belief that what we create matters.
+      Every piece represents that same energy: raw, intentional, and made to last.
+      This is not just clothing. This is proof.
+    </p>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+      <a href="products.html" class="btn btn-white">Shop Now</a>
+      <a href="#newsletter" class="btn btn-outline-red" style="border-color:rgba(255,255,255,0.4);color:#fff;">Join the Wave</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CATEGORIES ─────────────────────────────────────────────── -->
+<section class="categories-section">
+  <span class="label">Browse by Category</span>
+  <h2 class="display display-sm">Shop the<br/><span style="color:var(--red)">Range</span></h2>
+  <div class="cat-grid">
+    <div class="cat-card" onclick="location.href='products.html?cat=tops'">
+      <div class="cat-card-bg"><img src="images/tshirt-longsleeve.jpeg" alt="◈"></div>
+      <div class="cat-card-overlay"></div>
+      <div class="cat-card-body">
+        <p class="cat-card-label">Category 01</p>
+        <h3 class="cat-card-title">Tops</h3>
+        <span class="cat-card-cta">Shop Tops →</span>
+      </div>
+    </div>
+    <div class="cat-card" onclick="location.href='products.html?cat=bottoms'">
+      <div class="cat-card-bg"><img src="images/short2.jpeg" alt="◈"></div>
+      <div class="cat-card-overlay"></div>
+      <div class="cat-card-body">
+        <p class="cat-card-label">Category 02</p>
+        <h3 class="cat-card-title">Bottoms</h3>
+        <span class="cat-card-cta">Shop Bottoms →</span>
+      </div>
+    </div>
+    <div class="cat-card" onclick="location.href='products.html?cat=accessories'">
+      <div class="cat-card-bg"><img src="images/hat-snapback.jpeg" alt="◈"></div>
+      <div class="cat-card-overlay"></div>
+      <div class="cat-card-body">
+        <p class="cat-card-label">Category 03</p>
+        <h3 class="cat-card-title">Accessories</h3>
+        <span class="cat-card-cta">Shop Accessories →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── NEWSLETTER ─────────────────────────────────────────────── -->
+<section class="newsletter" id="newsletter">
+  <div class="newsletter-inner">
+    <div>
+      <h2 class="newsletter-title">Join the<br/><em>Wave</em></h2>
+      <p class="newsletter-sub">First to know. First to cop.<br/>No spam. Just drops.</p>
+    </div>
+    <div>
+      <div class="newsletter-form">
+        <input class="newsletter-input" type="email" placeholder="your@email.com" />
+        <button class="newsletter-btn">Subscribe</button>
+      </div>
+      <p class="newsletter-note">By subscribing you agree to receive emails from Kyomatos Apparel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────────── -->
+<footer class="footer" id="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><img src="images/logo-white.png" alt="Kyomatos" /></div>
+      <p class="footer-desc">Lagos streetwear built from nothing. Every piece is a statement. No shortcuts.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">TT</a>
+        <a href="#" class="social-btn">IG</a>
+        <a href="#" class="social-btn">YT</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Shop</p>
+      <ul class="footer-col-links">
+        <li><a href="products.html">All Products</a></li>
+        <li><a href="products.html?cat=tops">Tops</a></li>
+        <li><a href="products.html?cat=bottoms">Bottoms</a></li>
+        <li><a href="products.html?cat=accessories">Accessories</a></li>
+        <li><a href="products.html?cat=outerwear">Outerwear</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Info</p>
+      <ul class="footer-col-links">
+        <li><a href="#brand">About Us</a></li>
+        <li><a href="cart.html">Your Bag</a></li>
+        <li><a href="#newsletter">Newsletter</a></li>
+        <li><a href="admin.html">Admin</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Contact</p>
+      <div class="footer-contact">
+        <!-- TODO: Replace with real contact -->
+        <p>Lagos, Nigeria</p>
+        <p>hello@kyomatos.com</p>
+        <p>+234 000 000 0000</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 KYOMATOS APPAREL. All rights reserved.</p>
+    <p>Built by <a href="#">Kyomatos Tech / DevBridge</a></p>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="js/supabase.js"></script>
+<script src="js/cart.js"></script>
+<script>
+// Render drop grid from local product dataset to match products.html
+(function(){
+  const allProducts = [
+    { id:1, name:'Raglan Long Sleeve Tee',   price:18500, category:'tops',        image_url:'images/tshirt-longsleeve.jpeg', in_stock:true  },
+    { id:2, name:'Lagos Varsity Jacket',    price:65000, category:'outerwear',   image_url:'images/jacket-varsity.jpeg', in_stock:true  },
+    { id:3, name:'Gray Origin Short',       price:32000, category:'bottoms',     image_url:'images/short1.jpeg', in_stock:true  },
+    { id:4, name:'Kyomatos Snapback',       price:12000, category:'accessories', image_url:'images/hat-snapback.jpeg', in_stock:true  },
+    { id:5, name:'White Midnight Tank',     price:42000, category:'tops',        image_url:'images/tank-black.jpeg', in_stock:true  },
+    { id:6, name:'Off-White Origin Short',  price:28000, category:'bottoms',     image_url:'images/short2.jpeg', in_stock:false },
+    { id:7, name:'Seal Tank Top Red',       price:16000, category:'tops',        image_url:'images/tank-red-3.jpeg', in_stock:true  },
+    { id:8, name:'Logo Balaclava',          price:9500,  category:'accessories', image_url:'images/hat-balaclava.jpeg', in_stock:true  },
+    { id:9, name:'Grind Joggers Gray',      price:9500,  category:'bottoms',     image_url:'images/joggers1.jpeg', in_stock:true  },
+    { id:10, name:'Grind Joggers Black',    price:9500,  category:'bottoms',     image_url:'images/joggers2.jpeg', in_stock:true  }
+  ];
+
+  function localFormatPrice(n){ return (typeof formatPrice === 'function') ? formatPrice(n) : '₦' + n.toLocaleString(); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('drop-grid');
+    if (!grid) return;
+    const items = allProducts.slice(0,4);
+    grid.innerHTML = items.map(p => `
+      <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+        <div class="product-card-thumb">${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy"/>` : '◈'}</div>
+        <div class="product-card-body">
+          <p class="product-card-cat">${p.category}</p>
+          <h3 class="product-card-name">${p.name}</h3>
+          <p class="product-card-price">${p.in_stock ? localFormatPrice(p.price) : '<span style="color:var(--muted)">Sold Out</span>'}</p>
+        </div>
+        <div class="product-card-overlay"><span>Quick View</span></div>
+      </div>
+    `).join('');
+  });
+})();
+</script>
+</body>
+</html>
