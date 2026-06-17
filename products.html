@@ -18,7 +18,7 @@
 <body>
 
 <nav class="navbar">
-  <a href="index.html" class="nav-logo"><img src="images/logo-white.png" alt="Kyomatos"/></a>
+  <a href="index.html" class="nav-logo"><img src="logo-white.png" alt="Kyomatos"/></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="products.html" class="active">Drops</a></li>
@@ -76,7 +76,7 @@
 
 <footer class="footer">
   <div class="footer-grid">
-    <div><div class="footer-logo"><img src="images/logo-white.png" alt="Kyomatos"/></div><p class="footer-desc">Lagos streetwear built from nothing. No shortcuts.</p><div class="footer-socials"><a href="#" class="social-btn">TT</a><a href="#" class="social-btn">IG</a><a href="#" class="social-btn">YT</a></div></div>
+    <div><div class="footer-logo"><img src="logo-white.png" alt="Kyomatos"/></div><p class="footer-desc">Lagos streetwear built from nothing. No shortcuts.</p><div class="footer-socials"><a href="#" class="social-btn">TT</a><a href="#" class="social-btn">IG</a><a href="#" class="social-btn">YT</a></div></div>
     <div><p class="footer-col-title">Shop</p><ul class="footer-col-links"><li><a href="products.html">All Products</a></li><li><a href="products.html?cat=tops">Tops</a></li><li><a href="products.html?cat=bottoms">Bottoms</a></li><li><a href="products.html?cat=accessories">Accessories</a></li></ul></div>
     <div><p class="footer-col-title">Info</p><ul class="footer-col-links"><li><a href="index.html#brand">About</a></li><li><a href="cart.html">Your Bag</a></li></ul></div>
     <div><p class="footer-col-title">Contact</p><div class="footer-contact"><p>Lagos, Nigeria</p><p>hello@kyomatos.com</p></div></div>
@@ -85,8 +85,8 @@
 </footer>
 
 <div id="toast"></div>
-<script src="js/supabase.js"></script>
-<script src="js/cart.js"></script>
+<script src="supabase.js"></script>
+<script src="cart.js"></script>
 <script>
 let allProducts = [];
 let activeFilter = getParam('cat') || 'all';
@@ -112,16 +112,16 @@ async function fetchProducts() {
     // allProducts = await t.select('*','order=created_at.desc');
 
     allProducts = [
-      { id:1, name:'Raglan Long Sleeve Tee',   price:18500, category:'tops',        image_url:'images/tshirt-longsleeve.jpeg', in_stock:true  },
-      { id:2, name:'Lagos Varsity Jacket',    price:65000, category:'outerwear',   image_url:'images/jacket-varsity.jpeg', in_stock:true  },
-      { id:3, name:'Gray Origin Short',      price:32000, category:'bottoms',     image_url:'images/short1.jpeg', in_stock:true  },
-      { id:4, name:'Kyomatos Snapback',       price:12000, category:'accessories', image_url:'images/hat-snapback.jpeg', in_stock:true  },
-      { id:5, name:'White Midnight Tank',         price:42000, category:'tops',        image_url:'images/tank-black.jpeg', in_stock:true  },
-      { id:6, name:'Off-White Origin Short',        price:28000, category:'bottoms',     image_url:'images/short2.jpeg', in_stock:false },
-      { id:7, name:'Seal Tank Top Red',      price:16000, category:'tops',        image_url:'images/tank-red-3.jpeg', in_stock:true  },
-      { id:8, name:'Logo Balaclava',          price:9500,  category:'accessories', image_url:'images/hat-balaclava.jpeg', in_stock:true  },
-      { id:9, name:'Grind Joggers Gray',          price:9500,  category:'bottoms', image_url:'images/joggers1.jpeg', in_stock:true  },
-      { id:10, name:'Grind Joggers Black',          price:9500,  category:'bottoms', image_url:'images/joggers2.jpeg', in_stock:true  },
+      { id:1, name:'Raglan Long Sleeve Tee',   price:18500, category:'tops',        image_url:'tshirt-longsleeve.jpeg', in_stock:true  },
+      { id:2, name:'Lagos Varsity Jacket',    price:65000, category:'outerwear',   image_url:'jacket-varsity.jpeg', in_stock:true  },
+      { id:3, name:'Gray Origin Short',      price:32000, category:'bottoms',     image_url:'short1.jpeg', in_stock:true  },
+      { id:4, name:'Kyomatos Snapback',       price:12000, category:'accessories', image_url:'hat-snapback.jpeg', in_stock:true  },
+      { id:5, name:'White Midnight Tank',         price:42000, category:'tops',        image_url:'tank-black.jpeg', in_stock:true  },
+      { id:6, name:'Off-White Origin Short',        price:28000, category:'bottoms',     image_url:'short2.jpeg', in_stock:false },
+      { id:7, name:'Seal Tank Top Red',      price:16000, category:'tops',        image_url:'tank-red-3.jpeg', in_stock:true  },
+      { id:8, name:'Logo Balaclava',          price:9500,  category:'accessories', image_url:'hat-balaclava.jpeg', in_stock:true  },
+      { id:9, name:'Grind Joggers Gray',          price:9500,  category:'bottoms', image_url:'joggers1.jpeg', in_stock:true  },
+      { id:10, name:'Grind Joggers Black',          price:9500,  category:'bottoms', image_url:'joggers2.jpeg', in_stock:true  },
     ];
     renderProducts();
   } catch(err) {
